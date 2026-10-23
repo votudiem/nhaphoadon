@@ -2,12 +2,16 @@
 
 ## 1. Mở ứng dụng
 
-1. Cài **Python 3.12, bản Windows 64-bit**, từ python.org, bật Python Launcher khi cài. Đây là điều kiện để chạy gói Python, không phải bộ cài EXE độc lập.
-2. Giải nén toàn bộ `So_Mua_1_0_Windows.zip` vào thư mục riêng, ví dụ `D:\SoMua`. Không chạy ngay bên trong cửa sổ ZIP.
-3. Bấm đúp `BAT_DAU_WINDOWS.bat`. Lần đầu ứng dụng tạo môi trường Python riêng và cài dependency từ thư mục `vendor/windows` đã đóng gói, có kiểm tra checksum.
+1. Nếu máy đã có **Python 3.10 trở lên**, kể cả **3.15**, giữ nguyên. Nếu chưa có Python, cài bản hiện hành từ python.org và bật Python Launcher. App dành cho Windows 64-bit; không cần hạ Python hệ thống về 3.12.
+2. Giải nén toàn bộ `So_Mua_1_1_Windows.zip` vào thư mục riêng, ví dụ `D:\SoMua`. Không chạy ngay bên trong cửa sổ ZIP.
+3. Bấm đúp `BAT_DAU_WINDOWS.bat`. Bộ khởi tạo tự tạo Python 3.12 riêng trong `.runtime` nếu cần và cài dependency từ gói có sẵn, kiểm tra checksum. Lần đầu có thể cần Internet để tải Python riêng từ nguồn do uv quản lý. Nó không đổi Python mặc định của Windows. Những lần sau dùng lại môi trường đã tạo, không tải lại khi thư viện vẫn hoạt động.
 4. Trình duyệt tự mở giao diện. Giữ cửa sổ lệnh đang chạy; đóng cửa sổ này sẽ dừng app. Lần mở tiếp theo có thể bấm lại file BAT; launcher dùng lại app đang chạy nếu đúng là Sổ Mua.
 
-Không tải được Python hoặc script báo lỗi? Giữ nội dung lỗi ở cửa sổ. Chưa có bằng chứng chạy BAT trên Windows trong đợt bàn giao này; Linux và Chromium đã được kiểm thử. Cổng mặc định là 8765; nếu ứng dụng khác đang chiếm cổng, không dừng ứng dụng đó tùy tiện. Người hỗ trợ có thể chạy `python app.py --port 8766 --open` trong môi trường đã cài dependency.
+Nếu trước đó gặp lỗi do Python 3.15: đóng cửa sổ Sổ Mua cũ, giải nén bản 1.1 vào một thư mục mới và mở `BAT_DAU_WINDOWS.bat`. Nếu có dữ liệu, khi app đã dừng hãy sao chép nguyên thư mục `.data` từ bản cũ sang bản mới. Không xóa thư mục `.data`. Có thể cập nhật các file của gói mới ngay tại thư mục cũ nhưng vẫn phải giữ `.data`; `.venv` cũ được giữ nguyên.
+
+Môi trường `.runtime/venv` bị hỏng sau khi nâng Python sẽ được giữ lại tại `.runtime/backups` và tạo mới. Không có thao tác xóa hóa đơn hoặc thay đổi thư mục chứng từ. Nếu cần chạy bộ khởi tạo thủ công, dùng `py -3 bootstrap.py`.
+
+Không tải được runtime hoặc script báo lỗi? Giữ nội dung lỗi ở cửa sổ; kiểm tra Internet và quyền ghi thư mục app. Quá trình tải vẫn kiểm tra TLS/checksum, không tắt kiểm tra để vượt lỗi. Chưa có bằng chứng chạy BAT trên Windows trong đợt bàn giao này; Linux và Chromium đã được kiểm thử. Cổng mặc định là 8765; nếu ứng dụng khác đang chiếm cổng, không dừng ứng dụng đó tùy tiện. Người hỗ trợ có thể chạy `.runtime\venv\Scripts\python.exe app.py --port 8766 --open` trong môi trường đã cài dependency.
 
 ## 2. Thử quy trình không dùng hóa đơn thật
 

@@ -1,4 +1,4 @@
-# Báo cáo kiểm chứng · Sổ Mua cục bộ 1.0
+# Báo cáo kiểm chứng · Sổ Mua cục bộ 1.1
 
 Ngày: 23/10/2026. Môi trường thực thi: Linux, Python 3.12.14, Chromium headless. Dữ liệu thử được tạo tổng hợp; không chứa bộ hóa đơn thật Huệ Duy. Đây là bản mới, không phải source AppDeploy V9.2.
 
@@ -6,7 +6,7 @@ Ngày: 23/10/2026. Môi trường thực thi: Linux, Python 3.12.14, Chromium he
 
 | Kiểm tra | Kết quả |
 |---|---|
-| `python -m unittest discover -s tests -v` | 24 bài passed, 0 failed, 0 skipped trên máy kiểm thử có Tesseract |
+| `python -m unittest discover -s tests -v` | 33 bài passed, 0 failed, 0 skipped trên máy kiểm thử có Tesseract |
 | `pip check` | Không có dependency hỏng |
 | Biên dịch Python, kiểm tra cú pháp hai file JavaScript | Passed |
 | `tests/browser_smoke.py` | Passed: dữ liệu mẫu, lọc/tìm kiếm, đối chiếu, tạo công ty, CSV/XML, Excel, tải lại giữ dữ liệu và màn hình 390px; không có lỗi JS |
@@ -30,7 +30,7 @@ Các bài kiểm thử kiểm chứng:
 
 ## Chưa được xác nhận
 
-- **Windows:** chưa thực thi BAT, Chrome profile hoặc wheel native trên Windows; không có `.exe` độc lập. Người dùng cần Python 3.12 64-bit. Gói dependency đã chuẩn bị không thay cho kiểm thử máy đích.
+- **Windows:** chưa thực thi BAT, Chrome profile hoặc wheel native trên Windows; không có `.exe` độc lập. Python hệ thống chỉ dùng mở bộ khởi tạo (3.10+); app chạy trong runtime CPython 3.12 riêng. Gói dependency đã chuẩn bị không thay cho kiểm thử máy đích.
 - **CQT:** chưa kiểm tra được phiên đăng nhập/MST trên portal, chưa có tự tải danh sách/XML, chưa có rate-limit/resume của CQT. Nút mở CQT chỉ khởi chạy Chrome riêng. Thử HEAD tới cổng chính thức trong cloud bị proxy CONNECT 403. Đã lưu đề xuất thêm `hoadondientu.gdt.gov.vn` vào cấu hình mạng; cần user lưu/publish môi trường để áp dụng, chưa chứng minh runtime truy cập được.
 - **Dữ liệu thật:** chưa có `Hóa đơn(2).rar` 77 MB và bảng kê đối chiếu tháng 07/2026 Huệ Duy, nên số liệu 405/374 trong hồ sơ bàn giao chưa được kiểm chứng lại.
 - **Nghiệp vụ:** không xác minh chữ ký số XML hoặc kết luận tính hợp lệ/khấu trừ thuế; hóa đơn đặc biệt chỉ báo ngoại lệ. PDF/OCR là gợi ý và luôn cần người dùng xác nhận, không tự hiểu mọi mẫu bảng mặt hàng.
@@ -40,3 +40,11 @@ Các bài kiểm thử kiểm chứng:
 ## Tệp bàn giao
 
 Gói Windows kèm source, thư viện cài offline có hash, font/license, launcher, hướng dẫn và bài kiểm thử. Gói source tách riêng không chứa vendor để tiện phát triển. Cả hai loại trừ `.data`, `.git`, `.venv`, hóa đơn thật, cookie và Chrome profile. Ảnh giao diện trong `artifacts/` chỉ dùng dữ liệu tổng hợp.
+
+## Kiểm chứng bản sửa bộ khởi tạo 1.1
+
+- Dùng Python **3.15.0rc3 trên Linux** để chạy thật `bootstrap.py --prepare-only`: tự tải CPython 3.12.15 riêng, tạo `.runtime/venv`, cài dependency và kiểm tra import native thành công. Đây là kiểm thử bộ khởi tạo bằng 3.15, không phải chạy trực tiếp thư viện app trên 3.15. Chưa có Windows/Python 3.15 của người dùng để thực thi tại chỗ.
+- Chạy lại cùng Python 3.15 với `PIP_NO_INDEX=1 UV_OFFLINE=true`: chuẩn bị thành công, dùng lại runtime, không cần tải mạng.
+- Thêm 9 bài regression kiểm tra nhận Python 3.15, tự phục hồi môi trường hỏng và giữ nguyên dữ liệu hóa đơn, khóa tránh chạy cài đặt đồng thời, kiểm checksum công cụ, sửa executable bị thay đổi từ wheel hợp lệ, cache dependency, cài wheel có hash, và không đánh dấu sẵn sàng nếu import native thất bại. Tổng 33 bài passed.
+- Bộ khởi động BAT không còn yêu cầu `py -3.12` hoặc từ chối bản Python hệ thống khác 3.12. Python 3.12 là runtime nội bộ để khớp các thư viện native đã kiểm thử.
+- Công cụ uv Windows 0.12.23 lấy từ wheel chính thức PyPI, SHA-256 trong `bootstrap-tools.json`; runtime tải bằng uv giữ xác minh TLS/checksum. Không sửa PATH/registry Python mặc định, không xóa `.venv` cũ hoặc `.data`.

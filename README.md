@@ -1,8 +1,8 @@
-# Sổ Mua — Trợ lý hóa đơn mua vào · bản cục bộ 1.0
+# Sổ Mua — Trợ lý hóa đơn mua vào · bản cục bộ 1.1
 
 Ứng dụng một trang bằng tiếng Việt, chạy và lưu chứng từ trên máy kế toán. Được xây mới theo đặc tả của người dùng và hồ sơ bàn giao V9.2; không phải mã nguồn AppDeploy được khôi phục.
 
-**Bắt đầu:** xem `HUONG_DAN_SU_DUNG.md`. Trên Windows 64-bit có Python 3.12, giải nén gói Windows rồi bấm `BAT_DAU_WINDOWS.bat`. Gói Windows có sẵn dependency, được kiểm tra SHA-256 khi cài; không cần tải thư viện từ mạng. OCR cần Tesseract riêng; nếu chưa cài vẫn có thể đọc PDF text/XML và kiểm tra, nhập lại dữ liệu ảnh từ file gốc.
+**Bắt đầu:** xem `HUONG_DAN_SU_DUNG.md`. Trên Windows 64-bit, giải nén gói Windows rồi bấm `BAT_DAU_WINDOWS.bat`. Bộ khởi tạo nhận Python hệ thống từ 3.10 trở lên, kể cả 3.15, rồi chạy app bằng Python 3.12 riêng. Không cần gỡ hoặc hạ bản Python hệ thống. Lần đầu có thể cần Internet để tải runtime riêng; các lần sau dùng lại `.runtime`. Dependency Windows và công cụ uv đã được đóng gói, kiểm tra SHA-256. OCR cần Tesseract riêng; nếu chưa cài vẫn có thể đọc PDF text/XML và kiểm tra, nhập lại dữ liệu ảnh từ file gốc.
 
 ## Đã có
 
@@ -27,7 +27,15 @@ Chưa kiểm tra chữ ký số/tính hợp lệ thuế XML; không tự xử l�
 
 ## Phát triển và kiểm thử
 
-Python 3.12+ trên Linux:
+Chạy qua bộ khởi tạo trên Linux (Python hệ thống 3.10+):
+
+```sh
+./start.sh
+# Hoặc chỉ chuẩn bị môi trường, chưa mở app:
+python3 bootstrap.py --prepare-only
+```
+
+Phát triển trực tiếp bằng Python 3.12:
 
 ```sh
 cd /workspace/nhaphoadon
@@ -38,5 +46,7 @@ python3 -m venv .venv
 ```
 
 Máy chủ chỉ bind `127.0.0.1:8765`, kiểm tra Host/Origin và header riêng cho thao tác ghi. Mở trình duyệt trên cùng máy với host/cổng này. Không mở máy chủ ra LAN/Internet. Chạy `python tests/browser_smoke.py` và `python tests/browser_extended.py` khi có Playwright và Chromium tại `/usr/bin/chromium`; kiểm thử dùng SQLite/thư mục tạm, không dùng dữ liệu người dùng.
+
+Bộ khởi tạo và runtime riêng nằm trong `.runtime/` (không đưa vào Git hoặc gói phát hành). Môi trường riêng hỏng được giữ lại trong `.runtime/backups` và tạo lại; thư mục `.venv` của bản cũ không bị xóa.
 
 Dữ liệu nằm trong `.data/invoices.sqlite`, gồm raw chứng từ và lịch sử. `INVOICE_DATA_DIR` đổi vị trí. Chrome profile nằm riêng trong `.data/browser_profiles/<MST>`, chứa phiên nhạy cảm; không đưa vào Git hoặc gửi cho người khác. Không sửa/xóa `.data` khi cập nhật app. Không đẩy chứng từ thật lên repository công khai.

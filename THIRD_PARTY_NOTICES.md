@@ -4,4 +4,4 @@ Gói Windows chứa các wheel chính thức được tải từ PyPI: openpyxl,
 
 Font DejaVuSans được kèm để hiển thị PDF tiếng Việt. Giấy phép và thông báo bản quyền nằm tại `assets/FONT-LICENSE.txt`.
 
-Tesseract và Python không được đóng gói thành binary trong ZIP này. Người dùng cài các runtime đó riêng khi cần. Chromium/Playwright chỉ dùng để kiểm thử trong môi trường phát triển, không nằm trong gói Windows.
+Công cụ uv 0.12.23 được đóng gói dưới dạng wheel chính thức trong `vendor/bootstrap`, giữ nguyên license/metadata trong wheel; `bootstrap-tools.json` ghi SHA-256 trước khi trích xuất executable. Python chạy app được uv tải riêng khi cần; không gộp runtime đó vào ZIP. Tesseract cài riêng khi cần OCR. Chromium/Playwright chỉ dùng để kiểm thử trong môi trường phát triển, không nằm trong gói Windows.
