@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sổ Mua · Trợ lý hóa đơn</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<aside class="sidebar">
+<a class="brand" href="/"><span class="brand-mark">s<span>m</span></span><div>Sổ Mua<small>TRỢ LÝ HÓA ĐƠN</small></div></a>
+<div class="workspace-label">KHÔNG GIAN LÀM VIỆC</div>
+<button class="nav active" data-view="overview"><span>▦</span> Tổng quan <i>01</i></button>
+<button class="nav" data-view="invoices"><span>▤</span> Hóa đơn mua vào</button>
+<button class="nav" data-view="exceptions"><span>◇</span> Cần kiểm tra <b id="side-count">0</b></button>
+<div class="side-divider"></div>
+<div class="workspace-label">DOANH NGHIỆP <button id="add-company" title="Thêm công ty">＋</button></div>
+<div id="company-list"></div>
+<div class="sidebar-bottom"><span class="local-dot"></span> Dữ liệu lưu tại máy<small>Bản cục bộ · 1.0</small></div>
+</aside>
+<div class="shell">
+<header><div><span class="breadcrumb">Không gian làm việc</span><span class="slash">/</span><span id="breadcrumb-current">Tổng quan</span></div><div class="header-right"><span class="version">LOCAL WORKSPACE</span><span class="avatar">KT</span></div></header>
+<main>
+<div class="page-heading"><div><div class="eyebrow">GỌN CHỨNG TỪ. RÕ SỐ LIỆU.</div><h1 id="page-title">Tổng quan mua vào</h1><p>Kiểm soát hóa đơn của bạn, từ chứng từ đến bảng kê.</p></div><label class="period-control"><span>Kỳ kế toán</span><input type="month" id="period" required></label></div>
+<div class="connector-note"><span class="note-icon">i</span><div><strong>Bắt đầu với dữ liệu của bạn</strong><span>Nhập danh sách CQT từ CSV/Excel và kho chứng từ. Đọc XML/PDF/ảnh tại máy, đối chiếu và lập bảng kê. Kết nối CQT trực tiếp chưa tích hợp.</span></div><button id="demo-button" class="text-button">Khám phá dữ liệu mẫu ↗</button></div>
+<section class="company-bar"><div class="company-symbol">▥</div><div class="company-identity"><h2 id="company-name">Chưa có doanh nghiệp</h2><span id="company-tax">Thêm công ty để bắt đầu quản lý hóa đơn</span></div><span class="badge neutral" id="company-mode">Chế độ dữ liệu cục bộ</span><button class="button secondary" id="new-company">＋ Thêm công ty</button></section>
+<div class="workspace-tools"><div><button class="button secondary" id="open-cqt-button">↗ Mở CQT</button><button class="button secondary" id="settings-button">⚙ Cấu hình công ty</button><button class="button secondary" id="history-button">↶ Lịch sử kỳ</button><span class="badge neutral" id="period-state">Kỳ đang mở</span></div><div><button class="button secondary" id="batch-button">Xử lý các công ty đã cấu hình</button><button class="button primary" id="scan-button">▤ Quét kho & đối chiếu</button></div></div>
+<div id="job-progress" class="job-progress" hidden><strong id="job-title">Đang xử lý</strong><span id="job-detail"></span><progress></progress></div>
+<div class="metrics">
+<article class="metric"><div><span>Hóa đơn CQT</span><span class="metric-icon">▤</span></div><strong id="m-total">0</strong><small>Danh sách đã nhập trong kỳ</small></article>
+<article class="metric"><div><span>Đối chiếu khớp</span><span class="metric-icon green">✓</span></div><strong id="m-matched">0</strong><small><span class="tiny-dot"></span> Đủ chứng từ, khớp trường đã kiểm tra</small></article>
+<article class="metric"><div><span>Cần kiểm tra</span><span class="metric-icon amber">◇</span></div><strong id="m-exception">0</strong><small>Hóa đơn CQT có ngoại lệ</small></article>
+<article class="metric"><div><span>Tổng thanh toán</span><span class="metric-icon">₫</span></div><strong class="money-metric" id="m-money">0 <em>₫</em></strong><small id="money-caption">Theo danh sách CQT · VND</small></article>
+</div>
+<section class="control-panel"><div class="panel-top"><div><h2>Chứng từ trong tầm kiểm soát</h2><p id="quality-caption">Chọn công ty và nhập dữ liệu để bắt đầu.</p></div><span class="badge neutral" id="quality-badge">Chưa có dữ liệu</span></div><div class="quality-track"><span id="quality-good"></span><span id="quality-ambiguous"></span><span id="quality-missing"></span></div><div class="quality-legend"><span><i class="legend-dot green-bg"></i> Có chứng từ ghép duy nhất <b id="q-read">0</b></span><span><i class="legend-dot amber-bg"></i> Trùng khóa <b id="q-ambiguous">0</b></span><span><i class="legend-dot gray-bg"></i> Chưa có chứng từ <b id="q-missing">0</b></span><span class="quality-files" id="q-files">0 XML trong kho</span></div></section>
+<section class="invoice-panel"><div class="invoice-title"><div><h2>Hóa đơn mua vào <span id="table-count" class="count-pill">0</span></h2><p>Mỗi hóa đơn một dòng. Mọi ngoại lệ đều có lý do.</p></div><div class="actions"><a class="button secondary" href="/api/template">↓ Mẫu CSV</a><button class="button secondary" id="import-cqt">＋ Nhập CQT</button><button class="button secondary" id="import-xml">＋ Nhập chứng từ</button><button class="button primary" id="export">↓ Xuất Excel</button></div></div>
+<div class="table-toolbar"><div class="tabs"><button class="tab active" data-filter="all">Tất cả <span id="tab-all">0</span></button><button class="tab" data-filter="matched">Đã khớp <span id="tab-matched">0</span></button><button class="tab" data-filter="exception">Ngoại lệ <span id="tab-exception">0</span></button></div><label class="search"><span>⌕</span><input id="search" placeholder="Tìm số hóa đơn, người bán, MST…" aria-label="Tìm hóa đơn"></label></div>
+<div class="table-scroll"><table><thead><tr><th>SỐ HÓA ĐƠN</th><th>NGƯỜI BÁN</th><th>NGÀY HÓA ĐƠN</th><th class="right">TỔNG THANH TOÁN</th><th>ĐỐI CHIẾU</th><th></th></tr></thead><tbody id="invoice-rows"></tbody></table></div>
+<div id="empty-state" class="empty-state"><div class="empty-icon">▤</div><h3>Một kỳ kế toán gọn gàng bắt đầu từ đây</h3><p>Thêm công ty, nhập danh sách CQT theo mẫu và các file XML tương ứng.<br>Hoặc dùng dữ liệu mẫu để khám phá quy trình.</p><button class="button primary" id="empty-demo">Dùng thử dữ liệu mẫu ↗</button></div>
+<div class="table-footer"><span id="result-count">Chưa có hóa đơn</span><span>Nhấn vào hóa đơn để xem chứng từ →</span></div></section>
+<section id="additional" class="additional" hidden><h2>Ngoài bảng kê CQT</h2><p>File đọc lỗi chưa xác định được hóa đơn tương ứng; không tự gán thành hóa đơn thiếu.</p><button class="button secondary" id="retry-button">↻ Xử lý lại riêng file lỗi</button><div id="additional-list"></div></section>
+<footer><span>Sổ Mua <i>·</i> Trợ lý hóa đơn mua vào</span><span>Rõ nguồn dữ liệu, an tâm đối chiếu.</span></footer>
+</main></div>
+<input type="file" id="file-cqt" accept=".csv,.xlsx" hidden><input type="file" id="file-xml" accept=".xml,.pdf,.png,.jpg,.jpeg" multiple hidden>
+<dialog id="company-dialog"><form id="company-form"><div class="dialog-heading"><div><div class="eyebrow">KHÔNG GIAN LÀM VIỆC</div><h2>Thêm doanh nghiệp</h2></div><button type="button" class="close" id="close-company" aria-label="Đóng">×</button></div><p>Mỗi mã số thuế có một kho dữ liệu riêng biệt.</p><label>Tên doanh nghiệp<input name="name" required maxlength="200" placeholder="Ví dụ: Công ty TNHH Minh An"></label><label>Mã số thuế người mua<input name="tax" required pattern="[0-9]{10}(-?[0-9]{3})?" placeholder="10 hoặc 13 chữ số"></label><p id="company-error" class="form-error" role="alert"></p><button type="submit" class="button primary">Tạo hồ sơ công ty</button></form></dialog>
+<dialog id="document-dialog"><div id="document-content"></div></dialog>
+<div id="toast" role="status" hidden></div>
+<script src="/app.js"></script><script src="/workflow.js"></script></body></html>
